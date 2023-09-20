@@ -1,0 +1,67 @@
+pipeline{
+    agent any
+     tools {
+        maven 'Maven-3.6.1'
+    }
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git 'https://github.com/aliasgarxo/JenkinsDocker_pipeline.git'
+                sh "git clone https://github.com/aliasgarxo/JenkinsDocker_pipeline.git"
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean sonar:sonar package"
+                
+            }
+        }
+        stage('Upload War To Nexus'){
+            steps{
+                  nexusArtifactUploader artifacts: [
+                       [
+                            artifactId: 'myweb', 
+                            classifier: '', 
+                            file: "target/myweb-8.2.0.war", 
+                            type: 'war'
+                       ]
+                  ], 
+                  credentialsId: 'nexus3', 
+                  groupId: 'in.javahome', 
+                  nexusUrl: '13.235.18.88:8081', 
+                  nexusVersion: 'nexus3', 
+                  protocol: 'http', 
+                  repository: 'Arch-Proj', 
+                  version: '8.2.0'  
+              }
+            }
+            stage("Docker-image-build"){
+                steps{
+                    sh """
+                        docker build -t myimg .
+
+                    """
+
+                }
+            }
+        // stage("deploy-dev"){
+        //     steps{
+        //         sshagent(['tomcat-new1']) {
+        //         sh """
+        //             scp -o StrictHostKeyChecking=no target/myweb-8.2.0.war  ec2-user@172.31.33.111:/home/ec2-user/apache-tomcat-9.0.80/webapps/
+                    
+        //             ssh ec2-user@172.31.33.111 /home/ec2-user/apache-tomcat-9.0.80/bin/shutdown.sh
+                    
+        //             ssh ec2-user@172.31.33.111 /home/ec2-user/apache-tomcat-9.0.80/bin/startup.sh
+                
+        //         """
+        //     }
+            
+        //     }
+        // }
+    }
+}
