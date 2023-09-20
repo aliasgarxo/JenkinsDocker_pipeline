@@ -4,9 +4,9 @@ RUN mv webapps.dist/ webapps
 
 COPY target/myweb*.war /usr/local/tomcat/webapps/myweb.war
 
-COPY JenkinsDocker_pipeline/context.xml /usr/local/tomcat/webapps/host-manager/META-INF/context.xml
-COPY JenkinsDocker_pipeline/context.xml /usr/local/tomcat/webapps/manager/META-INF/context.xml
-COPY JenkinsDocker_pipeline/tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
+COPY context.xml /usr/local/tomcat/webapps/host-manager/META-INF/context.xml
+COPY context.xml /usr/local/tomcat/webapps/manager/META-INF/context.xml
+COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 
 
 # RUN sudo yum install java-1.8.0-openjdk
