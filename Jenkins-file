@@ -43,9 +43,9 @@ pipeline{
             stage("Docker-image-build"){
                 steps{
                     sh """
-                        docker login
+                        docker login -u=dullhuke -p=Dellhoak987
                         docker build -t myimg .
-                        docker image tag myimg dullhuke/dullhuke
+                        docker image tag myimg:latest dullhuke/dullhuke:latest
                         docker push dullhuke/dullhuke:latest
 
                     """
