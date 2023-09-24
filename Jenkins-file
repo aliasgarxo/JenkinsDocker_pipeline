@@ -55,7 +55,7 @@ pipeline{
                 steps{
                     sshagent(['dock-tom']) {
                         sh """
-                            ssh ec2-user@3.110.187.3 docker run -d -p 1324:8081 dullhuke/dullhuke
+                            ssh ec2-user@3.110.187.3 docker run -d -p 1324:8080 dullhuke/dullhuke
                         """
                 }
 
